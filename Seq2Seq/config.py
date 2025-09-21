@@ -4,9 +4,10 @@ BATCH_SIZE = 1
 LEARNING_RATE=0.0001
 N_EPOCHS = 50
 CLIP = 1
-TRAIN_PATH = '../data/train.csv'
-VALID_PATH = '../data/valid.csv'
-TEST_PATH = '../data/test.csv'
+# These paths will be overridden in test_examples.py
+TRAIN_PATH = 'data/train.csv'
+VALID_PATH = 'data/valid.csv'
+TEST_PATH = 'data/test.csv'
 X_FORMAT='csv'
 GLOVE_PATH = '../glove.840B.300d.txt'
 TRAIN_SPLIT=0.7

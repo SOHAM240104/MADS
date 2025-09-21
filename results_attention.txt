@@ -1,0 +1,368 @@
+Training Results with Early Stopping and LR Scheduling
+==================================================
+Epoch: 01 | Time: 8m 35s
+	Train Loss: 6.929 | Train PPL: 1021.192
+	 Val. Loss: 6.923 |  Val. PPL: 1015.635
+	 Learning Rate: 0.000001
+	 Best Val Loss: 6.923 (Epoch 1)
+--------------------------------------------------
+Epoch: 02 | Time: 9m 3s
+	Train Loss: 6.900 | Train PPL: 992.290
+	 Val. Loss: 6.858 |  Val. PPL: 951.224
+	 Learning Rate: 0.000002
+	 Best Val Loss: 6.858 (Epoch 2)
+--------------------------------------------------
+Epoch: 03 | Time: 8m 49s
+	Train Loss: 6.809 | Train PPL: 906.353
+	 Val. Loss: 6.726 |  Val. PPL: 833.599
+	 Learning Rate: 0.000004
+	 Best Val Loss: 6.726 (Epoch 3)
+--------------------------------------------------
+Epoch: 04 | Time: 8m 45s
+	Train Loss: 6.653 | Train PPL: 775.370
+	 Val. Loss: 6.494 |  Val. PPL: 660.898
+	 Learning Rate: 0.000005
+	 Best Val Loss: 6.494 (Epoch 4)
+--------------------------------------------------
+Epoch: 05 | Time: 8m 53s
+	Train Loss: 6.382 | Train PPL: 591.306
+	 Val. Loss: 6.096 |  Val. PPL: 443.883
+	 Learning Rate: 0.000006
+	 Best Val Loss: 6.096 (Epoch 5)
+--------------------------------------------------
+Epoch: 06 | Time: 50m 13s
+	Train Loss: 5.873 | Train PPL: 355.276
+	 Val. Loss: 5.270 |  Val. PPL: 194.502
+	 Learning Rate: 0.000007
+	 Best Val Loss: 5.270 (Epoch 6)
+--------------------------------------------------
+Epoch: 07 | Time: 8m 37s
+	Train Loss: 5.322 | Train PPL: 204.740
+	 Val. Loss: 4.874 |  Val. PPL: 130.878
+	 Learning Rate: 0.000008
+	 Best Val Loss: 4.874 (Epoch 7)
+--------------------------------------------------
+Epoch: 08 | Time: 8m 20s
+	Train Loss: 5.142 | Train PPL: 170.993
+	 Val. Loss: 4.571 |  Val. PPL:  96.667
+	 Learning Rate: 0.000010
+	 Best Val Loss: 4.571 (Epoch 8)
+--------------------------------------------------
+Epoch: 09 | Time: 10m 36s
+	Train Loss: 4.916 | Train PPL: 136.509
+	 Val. Loss: 4.348 |  Val. PPL:  77.315
+	 Learning Rate: 0.000011
+	 Best Val Loss: 4.348 (Epoch 9)
+--------------------------------------------------
+Epoch: 10 | Time: 9m 56s
+	Train Loss: 4.758 | Train PPL: 116.541
+	 Val. Loss: 4.218 |  Val. PPL:  67.884
+	 Learning Rate: 0.000012
+	 Best Val Loss: 4.218 (Epoch 10)
+--------------------------------------------------
+Epoch: 11 | Time: 10m 44s
+	Train Loss: 4.633 | Train PPL: 102.827
+	 Val. Loss: 4.169 |  Val. PPL:  64.671
+	 Learning Rate: 0.000012
+	 Best Val Loss: 4.169 (Epoch 11)
+--------------------------------------------------
+Epoch: 12 | Time: 11m 42s
+	Train Loss: 4.539 | Train PPL:  93.602
+	 Val. Loss: 4.144 |  Val. PPL:  63.047
+	 Learning Rate: 0.000012
+	 Best Val Loss: 4.144 (Epoch 12)
+--------------------------------------------------
+Epoch: 13 | Time: 11m 22s
+	Train Loss: 4.474 | Train PPL:  87.739
+	 Val. Loss: 4.107 |  Val. PPL:  60.776
+	 Learning Rate: 0.000012
+	 Best Val Loss: 4.107 (Epoch 13)
+--------------------------------------------------
+Epoch: 14 | Time: 11m 3s
+	Train Loss: 4.414 | Train PPL:  82.618
+	 Val. Loss: 4.066 |  Val. PPL:  58.323
+	 Learning Rate: 0.000012
+	 Best Val Loss: 4.066 (Epoch 14)
+--------------------------------------------------
+Epoch: 15 | Time: 8m 28s
+	Train Loss: 4.355 | Train PPL:  77.861
+	 Val. Loss: 4.052 |  Val. PPL:  57.538
+	 Learning Rate: 0.000012
+	 Best Val Loss: 4.052 (Epoch 15)
+--------------------------------------------------
+Epoch: 16 | Time: 10m 24s
+	Train Loss: 4.298 | Train PPL:  73.528
+	 Val. Loss: 4.014 |  Val. PPL:  55.347
+	 Learning Rate: 0.000012
+	 Best Val Loss: 4.014 (Epoch 16)
+--------------------------------------------------
+Epoch: 17 | Time: 8m 19s
+	Train Loss: 4.251 | Train PPL:  70.149
+	 Val. Loss: 4.017 |  Val. PPL:  55.544
+	 Learning Rate: 0.000012
+	 Best Val Loss: 4.014 (Epoch 16)
+--------------------------------------------------
+Epoch: 18 | Time: 8m 26s
+	Train Loss: 4.208 | Train PPL:  67.196
+	 Val. Loss: 4.026 |  Val. PPL:  56.036
+	 Learning Rate: 0.000012
+	 Best Val Loss: 4.014 (Epoch 16)
+--------------------------------------------------
+Epoch: 19 | Time: 8m 24s
+	Train Loss: 4.173 | Train PPL:  64.919
+	 Val. Loss: 4.005 |  Val. PPL:  54.867
+	 Learning Rate: 0.000012
+	 Best Val Loss: 4.005 (Epoch 19)
+--------------------------------------------------
+Epoch: 20 | Time: 8m 21s
+	Train Loss: 4.140 | Train PPL:  62.780
+	 Val. Loss: 4.003 |  Val. PPL:  54.775
+	 Learning Rate: 0.000012
+	 Best Val Loss: 4.003 (Epoch 20)
+--------------------------------------------------
+Epoch: 21 | Time: 8m 19s
+	Train Loss: 4.110 | Train PPL:  60.945
+	 Val. Loss: 3.970 |  Val. PPL:  52.981
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.970 (Epoch 21)
+--------------------------------------------------
+Epoch: 22 | Time: 8m 18s
+	Train Loss: 4.085 | Train PPL:  59.420
+	 Val. Loss: 3.952 |  Val. PPL:  52.028
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.952 (Epoch 22)
+--------------------------------------------------
+Epoch: 23 | Time: 9m 1s
+	Train Loss: 4.068 | Train PPL:  58.415
+	 Val. Loss: 3.922 |  Val. PPL:  50.483
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.922 (Epoch 23)
+--------------------------------------------------
+Epoch: 24 | Time: 8m 28s
+	Train Loss: 4.041 | Train PPL:  56.889
+	 Val. Loss: 3.900 |  Val. PPL:  49.389
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.900 (Epoch 24)
+--------------------------------------------------
+Epoch: 25 | Time: 8m 25s
+	Train Loss: 4.025 | Train PPL:  55.993
+	 Val. Loss: 3.907 |  Val. PPL:  49.732
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.900 (Epoch 24)
+--------------------------------------------------
+Epoch: 26 | Time: 9m 10s
+	Train Loss: 4.001 | Train PPL:  54.640
+	 Val. Loss: 3.850 |  Val. PPL:  47.007
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.850 (Epoch 26)
+--------------------------------------------------
+Epoch: 27 | Time: 8m 24s
+	Train Loss: 3.982 | Train PPL:  53.629
+	 Val. Loss: 3.832 |  Val. PPL:  46.154
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.832 (Epoch 27)
+--------------------------------------------------
+Epoch: 28 | Time: 8m 23s
+	Train Loss: 3.955 | Train PPL:  52.201
+	 Val. Loss: 3.797 |  Val. PPL:  44.546
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.797 (Epoch 28)
+--------------------------------------------------
+Epoch: 29 | Time: 8m 44s
+	Train Loss: 3.928 | Train PPL:  50.805
+	 Val. Loss: 3.765 |  Val. PPL:  43.159
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.765 (Epoch 29)
+--------------------------------------------------
+Epoch: 30 | Time: 416m 22s
+	Train Loss: 3.901 | Train PPL:  49.442
+	 Val. Loss: 3.736 |  Val. PPL:  41.927
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.736 (Epoch 30)
+--------------------------------------------------
+Epoch: 31 | Time: 8m 37s
+	Train Loss: 3.885 | Train PPL:  48.663
+	 Val. Loss: 3.719 |  Val. PPL:  41.243
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.719 (Epoch 31)
+--------------------------------------------------
+Epoch: 32 | Time: 9m 2s
+	Train Loss: 3.859 | Train PPL:  47.440
+	 Val. Loss: 3.688 |  Val. PPL:  39.955
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.688 (Epoch 32)
+--------------------------------------------------
+Epoch: 33 | Time: 9m 16s
+	Train Loss: 3.844 | Train PPL:  46.702
+	 Val. Loss: 3.671 |  Val. PPL:  39.273
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.671 (Epoch 33)
+--------------------------------------------------
+Epoch: 34 | Time: 9m 47s
+	Train Loss: 3.821 | Train PPL:  45.653
+	 Val. Loss: 3.658 |  Val. PPL:  38.799
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.658 (Epoch 34)
+--------------------------------------------------
+Epoch: 35 | Time: 11m 57s
+	Train Loss: 3.805 | Train PPL:  44.923
+	 Val. Loss: 3.618 |  Val. PPL:  37.281
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.618 (Epoch 35)
+--------------------------------------------------
+Epoch: 36 | Time: 11m 45s
+	Train Loss: 3.786 | Train PPL:  44.079
+	 Val. Loss: 3.601 |  Val. PPL:  36.642
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.601 (Epoch 36)
+--------------------------------------------------
+Epoch: 37 | Time: 11m 36s
+	Train Loss: 3.768 | Train PPL:  43.309
+	 Val. Loss: 3.600 |  Val. PPL:  36.601
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.600 (Epoch 37)
+--------------------------------------------------
+Epoch: 38 | Time: 12m 3s
+	Train Loss: 3.752 | Train PPL:  42.606
+	 Val. Loss: 3.615 |  Val. PPL:  37.149
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.600 (Epoch 37)
+--------------------------------------------------
+Epoch: 39 | Time: 11m 41s
+	Train Loss: 3.732 | Train PPL:  41.753
+	 Val. Loss: 3.571 |  Val. PPL:  35.547
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.571 (Epoch 39)
+--------------------------------------------------
+Epoch: 40 | Time: 11m 38s
+	Train Loss: 3.721 | Train PPL:  41.319
+	 Val. Loss: 3.540 |  Val. PPL:  34.458
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.540 (Epoch 40)
+--------------------------------------------------
+Epoch: 41 | Time: 11m 46s
+	Train Loss: 3.699 | Train PPL:  40.395
+	 Val. Loss: 3.518 |  Val. PPL:  33.728
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.518 (Epoch 41)
+--------------------------------------------------
+Epoch: 42 | Time: 11m 35s
+	Train Loss: 3.677 | Train PPL:  39.508
+	 Val. Loss: 3.506 |  Val. PPL:  33.314
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.506 (Epoch 42)
+--------------------------------------------------
+Epoch: 43 | Time: 9m 19s
+	Train Loss: 3.666 | Train PPL:  39.109
+	 Val. Loss: 3.517 |  Val. PPL:  33.688
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.506 (Epoch 42)
+--------------------------------------------------
+Epoch: 44 | Time: 8m 42s
+	Train Loss: 3.650 | Train PPL:  38.478
+	 Val. Loss: 3.507 |  Val. PPL:  33.349
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.506 (Epoch 42)
+--------------------------------------------------
+Epoch: 45 | Time: 8m 39s
+	Train Loss: 3.629 | Train PPL:  37.688
+	 Val. Loss: 3.493 |  Val. PPL:  32.876
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.493 (Epoch 45)
+--------------------------------------------------
+Epoch: 46 | Time: 8m 41s
+	Train Loss: 3.616 | Train PPL:  37.176
+	 Val. Loss: 3.501 |  Val. PPL:  33.136
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.493 (Epoch 45)
+--------------------------------------------------
+Epoch: 47 | Time: 8m 42s
+	Train Loss: 3.594 | Train PPL:  36.388
+	 Val. Loss: 3.489 |  Val. PPL:  32.760
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.489 (Epoch 47)
+--------------------------------------------------
+Epoch: 48 | Time: 8m 42s
+	Train Loss: 3.579 | Train PPL:  35.827
+	 Val. Loss: 3.494 |  Val. PPL:  32.930
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.489 (Epoch 47)
+--------------------------------------------------
+Epoch: 49 | Time: 8m 46s
+	Train Loss: 3.565 | Train PPL:  35.350
+	 Val. Loss: 3.461 |  Val. PPL:  31.854
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.461 (Epoch 49)
+--------------------------------------------------
+Epoch: 50 | Time: 8m 43s
+	Train Loss: 3.544 | Train PPL:  34.622
+	 Val. Loss: 3.464 |  Val. PPL:  31.953
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.461 (Epoch 49)
+--------------------------------------------------
+Epoch: 51 | Time: 8m 44s
+	Train Loss: 3.529 | Train PPL:  34.104
+	 Val. Loss: 3.434 |  Val. PPL:  30.997
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.434 (Epoch 51)
+--------------------------------------------------
+Epoch: 52 | Time: 8m 43s
+	Train Loss: 3.516 | Train PPL:  33.660
+	 Val. Loss: 3.461 |  Val. PPL:  31.838
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.434 (Epoch 51)
+--------------------------------------------------
+Epoch: 53 | Time: 8m 44s
+	Train Loss: 3.507 | Train PPL:  33.341
+	 Val. Loss: 3.434 |  Val. PPL:  30.985
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.434 (Epoch 53)
+--------------------------------------------------
+Epoch: 54 | Time: 8m 43s
+	Train Loss: 3.491 | Train PPL:  32.832
+	 Val. Loss: 3.413 |  Val. PPL:  30.348
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.413 (Epoch 54)
+--------------------------------------------------
+Epoch: 55 | Time: 8m 45s
+	Train Loss: 3.476 | Train PPL:  32.330
+	 Val. Loss: 3.395 |  Val. PPL:  29.803
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.395 (Epoch 55)
+--------------------------------------------------
+Epoch: 56 | Time: 8m 41s
+	Train Loss: 3.463 | Train PPL:  31.924
+	 Val. Loss: 3.397 |  Val. PPL:  29.886
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.395 (Epoch 55)
+--------------------------------------------------
+Epoch: 57 | Time: 8m 44s
+	Train Loss: 3.453 | Train PPL:  31.595
+	 Val. Loss: 3.403 |  Val. PPL:  30.056
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.395 (Epoch 55)
+--------------------------------------------------
+Epoch: 58 | Time: 8m 49s
+	Train Loss: 3.437 | Train PPL:  31.080
+	 Val. Loss: 3.398 |  Val. PPL:  29.910
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.395 (Epoch 55)
+--------------------------------------------------
+Epoch: 59 | Time: 10m 11s
+	Train Loss: 3.429 | Train PPL:  30.839
+	 Val. Loss: 3.369 |  Val. PPL:  29.061
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.369 (Epoch 59)
+--------------------------------------------------
+Epoch: 60 | Time: 10m 15s
+	Train Loss: 3.417 | Train PPL:  30.470
+	 Val. Loss: 3.401 |  Val. PPL:  30.009
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.369 (Epoch 59)
+--------------------------------------------------
+Epoch: 61 | Time: 11m 37s
+	Train Loss: 3.401 | Train PPL:  29.998
+	 Val. Loss: 3.338 |  Val. PPL:  28.166
+	 Learning Rate: 0.000012
+	 Best Val Loss: 3.338 (Epoch 61)
+--------------------------------------------------

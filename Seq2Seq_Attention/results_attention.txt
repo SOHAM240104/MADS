@@ -1,2 +1,0 @@
-Training Results with Early Stopping and LR Scheduling
-==================================================

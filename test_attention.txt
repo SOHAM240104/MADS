@@ -1,0 +1,2 @@
+Test bleu :, 5.258616432547569, Test PPL:  28.299 Metric: 0.37276894079219397
+Model used: Best model from training
