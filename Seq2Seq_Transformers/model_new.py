@@ -2,7 +2,7 @@
 Seq2Seq Transformer model for command generation
 """
 import math
-from typing import Optional, Tuple
+from typing import List, Optional, Tuple
 
 import torch
 import torch.nn as nn
@@ -145,6 +145,9 @@ class Seq2SeqTransformer(nn.Module):
 
     @staticmethod
     def generate_square_subsequent_mask(size: int) -> torch.Tensor:
+        """Generate a square mask for the sequence. The masked positions are filled with float('-inf').
+           Unmasked positions are filled with float(0.0).
+        """
         mask = (torch.triu(torch.ones(size, size)) == 1).transpose(0, 1)
         mask = mask.float().masked_fill(mask == 0, float('-inf')).masked_fill(mask == 1, float(0.0))
         return mask
@@ -156,6 +159,7 @@ class Seq2SeqTransformer(nn.Module):
         max_len: int,
         start_symbol: int
     ) -> torch.Tensor:
+        """Generate a target sequence using greedy decoding."""
         memory = self.encode(src, src_mask)
         ys = torch.ones(1, 1).fill_(start_symbol).type_as(src).long()
         
@@ -182,7 +186,8 @@ class Seq2SeqTransformer(nn.Module):
         start_symbol: int,
         beam_size: int = 5,
         top_k: int = 1
-    ) -> torch.Tensor:
+    ) -> List[torch.Tensor]:
+        """Generate k best target sequences using beam search."""
         memory = self.encode(src, src_mask)
         
         # Initialize beam
@@ -218,82 +223,3 @@ class Seq2SeqTransformer(nn.Module):
         # Return top_k sequences
         beam.sort(key=lambda x: x[1], reverse=True)
         return [seq for seq, _ in beam[:top_k]]
-
-
-class Decoder(nn.Module):
-    def __init__(self, 
-                 output_dim, 
-                 hid_dim, 
-                 n_layers, 
-                 n_heads, 
-                 pf_dim, 
-                 dropout, 
-                 device,
-                 max_length = 100):
-        super().__init__()
-        
-        self.device = device
-        self.layers = nn.TransformerDecoderLayer(hid_dim,
-                                    n_heads, 
-                                    pf_dim, 
-                                    dropout)
-
-        self.decoder = nn.TransformerDecoder(self.layers, n_layers)
-   
-        
-    def forward(self, trg, enc_src, trg_pad_mask, trg_sub_mask, src_mask):
-                
-        output = self.decoder(tgt = trg,
-                              memory = enc_src,
-                              tgt_mask = trg_sub_mask,                             
-                              tgt_key_padding_mask = trg_pad_mask,
-                              memory_key_padding_mask = src_mask)
-        
-            
-        return output
-
-
-
-class Seq2Seq(nn.Module):
-    def __init__(self, 
-                 encoder, 
-                 decoder, 
-                 src_pad_idx, 
-                 trg_pad_idx, 
-                 device):
-        super().__init__()
-        
-        self.encoder = encoder
-        self.decoder = decoder
-        self.src_pad_idx = src_pad_idx
-        self.trg_pad_idx = trg_pad_idx
-        self.device = device
-        
-    def make_src_mask(self, src):
-
-        
-        src_mask = (src != self.src_pad_idx).unsqueeze(1).unsqueeze(2)
-
-        return src_mask
-    
-    def make_trg_mask(self, trg):
-        trg_pad_mask = (trg != self.trg_pad_idx).unsqueeze(1).unsqueeze(2)
-        
-        trg_len = trg.shape[1]
-        
-        trg_sub_mask = torch.tril(torch.ones((trg_len, trg_len), device = self.device)).bool()
-        
-            
-        
-        
-        return trg_pad_mask, trg_sub_mask
-
-    def forward(self, src, trg):
-                
-        src_mask = self.make_src_mask(src)
-        trg_pad_mask, trg_sub_mask = self.make_trg_mask(trg)
-        enc_src = self.encoder(src, src_mask)
-        
-        output = self.decoder(trg, enc_src, trg_pad_mask, trg_sub_mask, src_mask)
-        
-        return output

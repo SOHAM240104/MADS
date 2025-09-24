@@ -1,146 +1,205 @@
-import config
-import dataset
-import model
-import engine
-import time
-from tqdm import tqdm
-from torchtext.data import BucketIterator
-import torch.optim as optim
-import torch.nn as nn
+"""
+Training script for Seq2Seq Transformer
+"""
+import logging
+from pathlib import Path
+
 import torch
-import math
-import random
-import numpy as np
-import argparse
-from torchtext.data.metrics import bleu_score
-import  metric_utils
-import pickle
+import torch.nn as nn
+from torch.optim import AdamW
+from transformers import get_linear_schedule_with_warmup
+from tqdm.auto import tqdm
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--action", 
-	type=str, 
-	default='train', 
-	help="whether to train or test")
+from config import config
+from model_new import Seq2SeqTransformer
+from dataset import create_dataloaders
 
-args = parser.parse_args()
-def run():
-    Seed = 1234
-    random.seed(Seed)
-    np.random.seed(Seed)
-    torch.manual_seed(Seed)
-    torch.cuda.manual_seed(Seed)
-    torch.backends.cudnn.deterministic = True
-    train, valid, test, SRC, TRG = dataset.create_dataset()
-    train_iterator, valid_iterator, test_iterator = BucketIterator.splits(
-        (train, valid, test),
-        sort_key=lambda x: len(x.source),
-        batch_size=config.BATCH_SIZE,
-        device=config.device
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+def train_epoch(
+    model: nn.Module,
+    train_loader: torch.utils.data.DataLoader,
+    optimizer: torch.optim.Optimizer,
+    scheduler: torch.optim.lr_scheduler.LRScheduler,
+    epoch: int,
+    pad_idx: int
+) -> float:
+    model.train()
+    total_loss = 0
+    
+    progress_bar = tqdm(train_loader, desc=f'Epoch {epoch}')
+    for batch in progress_bar:
+        # Get batch data
+        src = batch['input_ids'].to(config.device)
+        tgt = batch['labels'].to(config.device)
+        tgt_input = tgt[:, :-1]  # Remove last token for input
+        
+        # Create masks
+        src_key_padding_mask = ~batch['attention_mask'].bool().to(config.device)  # Convert to padding mask
+        tgt_mask = model.generate_square_subsequent_mask(tgt_input.size(1)).to(config.device)
+        src_mask = None  # Let the model handle padding via key_padding_mask
+        
+        # Forward pass
+        logits = model(
+            src=src,
+            tgt=tgt_input,
+            src_mask=src_mask,
+            tgt_mask=tgt_mask,
+            src_padding_mask=src_key_padding_mask
         )
+        
+        # Calculate loss
+        optimizer.zero_grad()
+        loss_fn = nn.CrossEntropyLoss(ignore_index=pad_idx)
+        loss = loss_fn(
+            logits.reshape(-1, logits.shape[-1]),
+            tgt[:, 1:].reshape(-1)  # Remove first token (SOS) for target
+        )
+        
+        # Backward pass
+        loss.backward()
+        torch.nn.utils.clip_grad_norm_(model.parameters(), config.clip_grad)
+        optimizer.step()
+        scheduler.step()
+        
+        # Update progress
+        total_loss += loss.item()
+        progress_bar.set_postfix({'loss': loss.item()})
     
-    INPUT_DIM = len(SRC.vocab)
-    OUTPUT_DIM = len(TRG.vocab)
-    HID_DIM = 256
-    ENC_LAYERS = 3
-    DEC_LAYERS = 3
-    ENC_HEADS = 8
-    DEC_HEADS = 8
-    ENC_PF_DIM = 512
-    DEC_PF_DIM = 512
-    ENC_DROPOUT = 0.1
-    DEC_DROPOUT = 0.1
+    return total_loss / len(train_loader)
 
-    enc = model.Encoder(INPUT_DIM, 
-              HID_DIM, 
-              ENC_LAYERS, 
-              ENC_HEADS, 
-              ENC_PF_DIM, 
-              ENC_DROPOUT, 
-              config.device)
-
-    dec = model.Decoder(OUTPUT_DIM, 
-                HID_DIM, 
-                DEC_LAYERS, 
-                DEC_HEADS, 
-                DEC_PF_DIM, 
-                DEC_DROPOUT, 
-                config.device)
-
-
-    SRC_PAD_IDX = SRC.vocab.stoi[SRC.pad_token]
-    TRG_PAD_IDX = TRG.vocab.stoi[TRG.pad_token]
-
-
-    model_tr = model.Seq2Seq(enc, dec, SRC_PAD_IDX, TRG_PAD_IDX, config.device).to(config.device)
-
-    def initialize_weights(m):
-        if hasattr(m, 'weight') and m.weight.dim() > 1:
-            nn.init.xavier_uniform_(m.weight.data)
-
-    model_tr.apply(initialize_weights)
-
-    optimizer = optim.Adam(model_tr.parameters(), lr=config.LEARNING_RATE)
-
-    TRG_PAD_IDX = TRG.vocab.stoi[TRG.pad_token]
-
-    criterion = nn.CrossEntropyLoss(ignore_index = TRG_PAD_IDX)
-
-    def epoch_time(start_time, end_time):
-        elapsed_time = end_time - start_time
-        elapsed_mins = int(elapsed_time / 60)
-        elapsed_secs = int(elapsed_time - (elapsed_mins * 60))
-        return elapsed_mins, elapsed_secs
-
-    if(args.action=='train'):
-        best_valid_loss = float('inf')
-
-        for epoch in tqdm(range(config.N_EPOCHS)):
-            
-            start_time = time.time()
-            
-            train_loss = config.train(model_tr, train_iterator, optimizer, criterion, config.CLIP)
-            valid_loss = config.evaluate(model_tr, valid_iterator, criterion)
-            
-            end_time = time.time()
-            
-            epoch_mins, epoch_secs = epoch_time(start_time, end_time)
-            
-            if valid_loss < best_valid_loss:
-                best_valid_loss = valid_loss
-                torch.save(model_tr.state_dict(), 'model.bin')
-        
-            with open(config.RESULTS_SAVE_FILE, 'a') as f:
-                print(f'Epoch: {epoch+1:02} | Time: {epoch_mins}m {epoch_secs}s', file=f)
-                print(f'\tTrain Loss: {train_loss:.3f} | Train PPL: {math.exp(train_loss):7.3f}', file=f)
-                print(f'\t Val. Loss: {valid_loss:.3f} |  Val. PPL: {math.exp(valid_loss):7.3f}', file=f)
+def validate(
+    model: nn.Module,
+    val_loader: torch.utils.data.DataLoader,
+    pad_idx: int
+) -> float:
+    model.eval()
+    total_loss = 0
+    loss_fn = nn.CrossEntropyLoss(ignore_index=pad_idx)
     
-    elif(args.action=='test'):  
-        model_tr.load_state_dict(torch.load('model.bin'))
+    with torch.no_grad():
+        for batch in val_loader:
+            src = batch['input_ids'].to(config.device)
+            tgt = batch['labels'].to(config.device)
+            tgt_input = tgt[:, :-1]
+            
+            src_key_padding_mask = ~batch['attention_mask'].bool().to(config.device)
+            tgt_mask = model.generate_square_subsequent_mask(tgt_input.size(1)).to(config.device)
+            
+            logits = model(
+                src=src,
+                tgt=tgt_input,
+                src_mask=None,
+                tgt_mask=tgt_mask,
+                src_padding_mask=src_key_padding_mask
+            )
+            
+            loss = loss_fn(
+                logits.reshape(-1, logits.shape[-1]),
+                tgt[:, 1:].reshape(-1)
+            )
+            total_loss += loss.item()
+    
+    return total_loss / len(val_loader)
 
-        test_loss, t, o = engine.test(model_tr, test_iterator, criterion, TRG)
-
-        metric_val=0
-
-        for i in range(len(t)):
-            metric_val = metric_val + metric_utils.compute_metric(o[i], 1.0, t[i])
-
-        print('Nl2Cmd Metric  | ', metric_val/len(t))
-
-        print(f'| Test Loss: {test_loss:.3f} | Test PPL: {math.exp(test_loss):7.3f} |')
-
-    elif(args.action=='save_vocab'):
-        print('Source Vocab Length', len(SRC.vocab))
-        print('Target vocab length', len(TRG.vocab))
-        s1 = '\n'.join(k for k in SRC.vocab.itos)
-        s2 = '\n'.join(k for k in TRG.vocab.itos)
-        with open('NL_vocabulary.txt', 'w') as f:
-            f.write(s1)
-        with open('Bash_vocabulary.txt', 'w') as f:
-            f.write(s2)
+def train():
+    # Create model directory if it doesn't exist
+    config.model_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Create dataloaders
+    train_loader, val_loader, test_loader = create_dataloaders(config.tokenizer)
+    logger.info("Created data loaders")
+    
+    # Initialize model
+    model = Seq2SeqTransformer().to(config.device)
+    start_epoch = 0
+    best_val_loss = float('inf')
+    checkpoint = None
+    
+    # Load checkpoint if it exists
+    if config.model_path.exists():
+        logger.info(f"Loading checkpoint from {config.model_path}")
+        checkpoint = torch.load(config.model_path)
+        model.load_state_dict(checkpoint['model_state_dict'])
+        start_epoch = checkpoint['epoch'] + 1
+        best_val_loss = checkpoint['val_loss']
+        logger.info(f"Loaded checkpoint from epoch {start_epoch-1} with validation loss {best_val_loss:.4f}")
+    logger.info("Model initialized")
+    
+    # Setup optimizer and scheduler
+    optimizer = AdamW(
+        model.parameters(),
+        lr=config.learning_rate,
+        weight_decay=0.01
+    )
+    
+    # Load optimizer state if checkpoint exists
+    if checkpoint is not None:
+        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    
+    num_training_steps = len(train_loader) * config.n_epochs
+    warmup_steps = config.warmup_steps
+    
+    scheduler = get_linear_schedule_with_warmup(
+        optimizer,
+        num_warmup_steps=warmup_steps,
+        num_training_steps=num_training_steps
+    )
+    
+    # Training loop
+    best_val_loss = float('inf')
+    early_stopping_counter = 0
+    early_stopping_patience = 3
+    
+    logger.info("Starting training...")
+    for epoch in range(start_epoch, config.n_epochs):
+        train_loss = train_epoch(
+            model,
+            train_loader,
+            optimizer,
+            scheduler,
+            epoch + 1,
+            config.pad_token_id
+        )
         
+        val_loss = validate(model, val_loader, config.pad_token_id)
         
+        logger.info(f"Epoch {epoch + 1}")
+        logger.info(f"Train Loss: {train_loss:.4f}")
+        logger.info(f"Val Loss: {val_loss:.4f}")
+        
+        # Save best model
+        if val_loss < best_val_loss:
+            best_val_loss = val_loss
+            early_stopping_counter = 0
+            
+            # Save model
+            torch.save({
+                'epoch': epoch,
+                'model_state_dict': model.state_dict(),
+                'optimizer_state_dict': optimizer.state_dict(),
+                'scheduler_state_dict': scheduler.state_dict(),
+                'val_loss': val_loss,
+            }, config.model_path)
+            
+            logger.info("Saved best model")
+        else:
+            early_stopping_counter += 1
+        
+        if early_stopping_counter >= early_stopping_patience:
+            logger.info("Early stopping triggered")
+            break
+    
+    logger.info("Training completed")
+
+if __name__ == "__main__":
+    train()
+
+if __name__ == "__main__":
+    train()
 
 
-if __name__=='__main__':
-    run()
+if __name__ == "__main__":
+    train()
 
