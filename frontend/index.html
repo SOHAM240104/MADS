@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Whisper Transcriber</title>
+</head>
+<body>
+  <h1>🎙️ Whisper Speech-to-Text</h1>
+  <button id="recordBtn">Start Recording</button>
+  <p id="status"></p>
+  <h3>Transcription:</h3>
+  <pre id="result"></pre>
+  <audio id="playback" controls></audio>
+
+  <script>
+    let mediaRecorder, audioChunks = [];
+    const recordBtn = document.getElementById("recordBtn");
+    const status = document.getElementById("status");
+    const result = document.getElementById("result");
+    const playback = document.getElementById("playback");
+
+    recordBtn.onclick = async () => {
+      if (!mediaRecorder || mediaRecorder.state === "inactive") {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+
+        audioChunks = [];
+        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+
+        mediaRecorder.onstop = async () => {
+          const blob = new Blob(audioChunks, { type: "audio/webm" });
+          audioChunks = [];
+
+          // Debug: play back locally
+          playback.src = URL.createObjectURL(blob);
+
+          // Send to backend
+          const formData = new FormData();
+          formData.append("file", blob, "recording.webm");
+          status.innerText = "Uploading & transcribing...";
+
+          try {
+            const res = await fetch("http://localhost:8000/transcribe", {
+              method: "POST",
+              body: formData
+            });
+
+            if (!res.ok) {
+              throw new Error(`Server error: ${res.status}`);
+            }
+
+            const data = await res.json();
+            result.innerText = data.text || "(No transcription)";
+            status.innerText = "Done ✅";
+          } catch (err) {
+            console.error(err);
+            status.innerText = "Error ❌ " + err.message;
+          }
+        };
+
+        mediaRecorder.start();
+        recordBtn.innerText = "Stop Recording";
+        status.innerText = "Recording...";
+      } else {
+        mediaRecorder.stop();
+        recordBtn.innerText = "Start Recording";
+      }
+    };
+  </script>
+</body>
+</html>
+
+
